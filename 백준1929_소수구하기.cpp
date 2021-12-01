@@ -3,6 +3,7 @@
 using namespace std;
 int composite[1000000];
 
+// 애라 어쩌구
 int main() {
     int m, n;
     cin >> m >> n;

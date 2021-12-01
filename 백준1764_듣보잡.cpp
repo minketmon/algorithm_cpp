@@ -6,17 +6,10 @@ using namespace std;
 vector<string> v;
 vector<string> answer;
 
-void binary_search(int left, int right, string target) {
-    if (left > right) return;
-    else {
-        int mid = (left + right) / 2;
-        if (v[mid] == target) answer.push_back(target);
-        else if (v[mid] > target) binary_search(left, mid - 1, target);
-        else binary_search(mid + 1, right, target);
-    }
-}
-
 int main() {
+    cin.tie(nullptr);
+    ios::sync_with_stdio(false);
+
     int n, m;
     string s;
     cin >> n >> m;
@@ -27,7 +20,11 @@ int main() {
     sort(v.begin(), v.end());
     for (int i = 0; i < m; i++) {
         cin >> s;
-        binary_search(0, v.size() - 1, s);
+
+        int temp = lower_bound(v.begin(), v.end(), s) - v.begin();
+        if(v[temp] == s) {
+            answer.push_back(s);
+        }
     }
     cout << answer.size() << "\n";
     sort(answer.begin(), answer.end());

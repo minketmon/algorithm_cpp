@@ -34,7 +34,7 @@ int main() {
     cin >> m;
     for (int i = 0; i < m; i++) {
         cin >> num;
-        int temp = lower_bound(v.begin(), v.end(), num) - v.begin();
+        int temp = lower_bound(v.begin(), v.end(), num, greater()) - v.begin();
         if (v[temp] == num) cout << 1 << "\n";
         else cout << 0 << "\n";
     }
