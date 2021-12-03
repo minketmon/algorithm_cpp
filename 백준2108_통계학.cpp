@@ -17,6 +17,9 @@ bool compare(const pair<int, int> &a, const pair<int, int> &b) {
 }
 
 int main() {
+    cin.tie(nullptr);
+    ios::sync_with_stdio(false);
+    
     int n;
     double sum = 0;
     cin >> n;
