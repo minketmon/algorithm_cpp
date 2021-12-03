@@ -9,6 +9,7 @@ vector<int> v;
 vector<pair<int, int>> vv;
 int num;
 int cnt[8002];
+
 bool compare(const pair<int, int> &a, const pair<int, int> &b) {
     if (a.second != b.second) {
         return a.second > b.second;
@@ -23,10 +24,10 @@ int main() {
         cin >> num;
         sum += num;
         v.push_back(num);
-        if(cnt[num+4000] == 0) vv.push_back(pair<int, int>(num, 1));
-        cnt[num+4000]++;
+        if (cnt[num + 4000] == 0) vv.push_back(pair<int, int>(num, 1));
+        cnt[num + 4000]++;
     }
-    for(int i=0; i<vv.size(); i++) vv[i].second = cnt[vv[i].first+4000];
+    for (int i = 0; i < vv.size(); i++) vv[i].second = cnt[vv[i].first + 4000];
 
     sort(v.begin(), v.end());
     sort(vv.begin(), vv.end(), compare);
