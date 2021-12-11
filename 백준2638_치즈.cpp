@@ -5,7 +5,7 @@
 
 using namespace std;
 
-int map[101][101], visited[101][101];
+int map[101][101], visited[101][101], temp[101][101];
 int n, m, cnt;
 int x[] = {0, 0, -1, 1};
 int y[] = {-1, 1, 0, 0,};
@@ -27,14 +27,14 @@ void bfs(int a, int b) {
             int ny = cur_y + y[i];
             if (nx < 0 || ny < 0 || nx > n - 1 || ny > m - 1) continue;
             if (visited[nx][ny] == false) {
-                if (map[nx][ny] == 1) {
-                    v.push_back({nx, ny});
-                } else if (map[nx][ny] != 1) {
+                if (map[nx][ny] != 1) {
                     visited[nx][ny] = true;
-                    map[nx][ny] = 2 + cnt;
+                    map[nx][ny] = 2;
                     q.push({nx, ny});
                 }
-
+                else if(map[nx][ny] == 1) {
+                    temp[nx][ny]++;
+                }
             }
         }
     }
@@ -53,6 +53,7 @@ int main() {
     while (true) {
         cheese_cnt = 0;
         memset(visited, 0, sizeof(visited));
+        memset(temp, 0, sizeof(temp));
         v.clear();
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < m; j++) {
@@ -63,7 +64,12 @@ int main() {
         if (cheese_cnt == 0) break;
         bfs(0, 0);
         for (auto a: v) map[a.first][a.second] = cnt + 2;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if(temp[i][j]>1) map[i][j] =2;
+            }
+        }
         cnt++;
     }
-    cout << cnt << "\n" << cheese_v[cheese_v.size()-2];
+    cout << cnt;
 }
