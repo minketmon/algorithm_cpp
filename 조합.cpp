@@ -1,39 +1,32 @@
-#include<iostream>
+#include <iostream>
 #include <vector>
 
 using namespace std;
 int n, k;
+bool visited[1000];
 vector<int> v;
-int Arr[1001];
-bool Select[1001];
 
-void Print() {
-    for (int i = 0; i < n; i++) {
-        if (Select[i] == true) {
-            cout << v[i] << " ";
-        }
-    }
-    cout << endl;
-}
-
-void DFS(int Idx, int Cnt) {
-    if (Cnt == k) {
-        Print();
+void dfs(int idx, int cnt) {
+    if(cnt==k){
+        for(int i=0; i<n; i++){
+            if(visited[i]==true) cout << v[i] << " ";
+        }cout << "\n";
         return;
     }
 
-    for (int i = Idx; i < n; i++) {
-        if (Select[i] == true) continue;
-        Select[i] = true;
-
-        DFS(i, Cnt + 1);
-        Select[i] = false;
+    for(int i=idx; i<n; i++){
+        if(visited[i]==true) continue;
+        visited[i] = true;
+        dfs(i, cnt+1);
+        visited[i] = false;
     }
 }
 
-int main(void) {
-    cin >> n >> k;
-    for(int i=1; i<=n; i++)v.push_back(i);
+int main() {
+    cin.tie(nullptr);
+    ios::sync_with_stdio(false);
 
-    DFS(0, 0);
+    cin >> n >> k;
+    for (int i = 1; i <= n; i++) v.push_back(i);
+    dfs(0, 0);
 }
