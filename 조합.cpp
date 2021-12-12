@@ -1,28 +1,39 @@
-#include <iostream>
+#include<iostream>
 #include <vector>
 
 using namespace std;
-vector<int> sol, v;
 int n, k;
-void combination(int idx, int cnt) {
-    if (cnt == k) {
+vector<int> v;
+int Arr[1001];
+bool Select[1001];
 
-        cout << "\n";
-
+void Print() {
+    for (int i = 0; i < n; i++) {
+        if (Select[i] == true) {
+            cout << v[i] << " ";
+        }
     }
-    if (idx == n) return;
-    sol.push_back(v[idx]);
-    combination(idx + 1, cnt + 1);
-    sol.pop_back();
-    combination(idx + 1, cnt);
+    cout << endl;
 }
 
-int main() {
-    cin >> n  >> k;
-    for(int i=0; i<n; i++) {
-        int x;
-        cin >> x;
-        v.push_back(x);
+void DFS(int Idx, int Cnt) {
+    if (Cnt == k) {
+        Print();
+        return;
     }
-    combination(n, k);
+
+    for (int i = Idx; i < n; i++) {
+        if (Select[i] == true) continue;
+        Select[i] = true;
+
+        DFS(i, Cnt + 1);
+        Select[i] = false;
+    }
+}
+
+int main(void) {
+    cin >> n >> k;
+    for(int i=1; i<=n; i++)v.push_back(i);
+
+    DFS(0, 0);
 }
