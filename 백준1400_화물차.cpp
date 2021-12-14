@@ -26,7 +26,7 @@ int x[] = {0, 0, -1, 1}; // 좌 우 상 하
 int y[] = {-1, 1, 0, 0};
 int dist[21][21];
 char map[21][21];
-vector<Cross> cross[10];
+vector<Cross> cross;
 
 int main() {
     cin.tie(nullptr);
@@ -58,8 +58,8 @@ int main() {
             char dir;
             cin >> num >> dir >> a >> b;
             if (dir == '-')
-                cross[num].emplace_back(-1, a, b);
-            else cross[num].emplace_back(1, a, b);
+                cross.emplace_back(-1, a, b);
+            else cross.emplace_back(1, a, b);
         }
 
         while (!q.empty()) {
@@ -82,16 +82,16 @@ int main() {
                 if (map[nx][ny] - '0' >= 0 && map[nx][ny] - '0' < 10) { // 교차로이면 얼마나 기다려야되는지 계산을 그때그때
                     int num = map[nx][ny] - '0';
                     while (true) {
-                        int mod = nt % (cross[num].begin()->a + cross[num].begin()->b);
-                        if (mod == 0) mod = cross[num].begin()->a + cross[num].begin()->b;
-                        if (cross[num].begin()->dir == -1) { // 가로가 먼저 켜지는 신호등
-                            if (mod <= cross[num].begin()->a) { // 가로방향 신호등 on
+                        int mod = nt % (cross[num].a + cross[num].b);
+                        if (mod == 0) mod = cross[num].a + cross[num].b;
+                        if (cross[num].dir == -1) { // 가로가 먼저 켜지는 신호등
+                            if (mod <= cross[num].a) { // 가로방향 신호등 on
                                 if (i == 0 || i == 1) break;
                             } else { // 세로방향 신호등 on
                                 if (i == 2 || i == 3) break;
                             }
-                        } else if (cross[num].begin()->dir == 1) { // 세로가 먼저 켜지는 신호등
-                            if (mod <= cross[num].begin()->b) { // 세로방향 신호등 on
+                        } else if (cross[num].dir == 1) { // 세로가 먼저 켜지는 신호등
+                            if (mod <= cross[num].b) { // 세로방향 신호등 on
                                 if (i == 2 || i == 3) break;
                             } else { // 가로방향 신호등 on
                                 if (i == 0 || i == 1) break;
