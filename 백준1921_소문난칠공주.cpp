@@ -35,7 +35,7 @@ bool bfs(int a, int b) {
                 zero_cnt++;
             }
             if (zero_cnt >= 4 - out_cnt) return false;
-            if (visited[nx][ny] == true) continue;
+            if (visited[nx][ny]) continue;
             if (temp[nx][ny] == 1) {
                 visited[nx][ny] = true;
                 q.push({nx, ny});
@@ -54,7 +54,7 @@ void dfs(int idx, int cnt) {
         memset(temp, 0, sizeof(temp));
         memset(visited, 0, sizeof(visited));
         for (int i = 0; i < 25; i++) {
-            if (s[i] == true) { // 조합 뽑음 25C7
+            if (s[i]) { // 조합 뽑음 25C7
                 if (map[i / 5][i % 5] == 'S') s_cnt++;
                 else d_cnt++;
                 temp[i / 5][i % 5] = 1;
@@ -63,13 +63,13 @@ void dfs(int idx, int cnt) {
             }
         }
         if (s_cnt < 4) return; // 다솜파가 4명 미만인거 거름
-        if (bfs(a, b) == true)
+        if (bfs(a, b))
             ans++;
         return;
     }
 
     for (int i = idx; i < 25; i++) {
-        if (s[i] == true) continue;
+        if (s[i]) continue;
         s[i] = true;
         dfs(i, cnt + 1);
         s[i] = false;
