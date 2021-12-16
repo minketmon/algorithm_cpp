@@ -16,10 +16,6 @@ struct Cross {
     }
 };
 
-struct Car {
-    int x, y;
-};
-
 int n, m, cross_cnt;
 bool res;
 int x[] = {0, 0, -1, 1}; // 좌 우 상 하
@@ -31,11 +27,12 @@ vector<Cross> cross;
 int main() {
     cin.tie(nullptr);
     ios::sync_with_stdio(false);
-    while (1) {
+    while (true) {
         cin >> n >> m;
         if (n == 0 && m == 0) return 0;
         memset(map, 0, sizeof(map));
         memset(dist, 0, sizeof(dist));
+        cross.clear();
         cross_cnt = 0;
         res = false;
         priority_queue<pair<int, pair<int, int>>> q;
@@ -82,16 +79,16 @@ int main() {
                 if (map[nx][ny] - '0' >= 0 && map[nx][ny] - '0' < 10) { // 교차로이면 얼마나 기다려야되는지 계산을 그때그때
                     int num = map[nx][ny] - '0';
                     while (true) {
-                        int mod = nt % (cross[num].begin()->a + cross[num].begin()->b);
-                        if (mod == 0) mod = cross[num].begin()->a + cross[num].begin()->b;
-                        if (cross[num].begin()->dir == -1) { // 가로가 먼저 켜지는 신호등
-                            if (mod <= cross[num].begin()->a) { // 가로방향 신호등 on
+                        int mod = nt % (cross[num].a + cross[num].b);
+                        if (mod == 0) mod = cross[num].a + cross[num].b;
+                        if (cross[num].dir == -1) { // 가로가 먼저 켜지는 신호등
+                            if (mod <= cross[num].a) { // 가로방향 신호등 on
                                 if (i == 0 || i == 1) break;
                             } else { // 세로방향 신호등 on
                                 if (i == 2 || i == 3) break;
                             }
-                        } else if (cross[num].begin()->dir == 1) { // 세로가 먼저 켜지는 신호등
-                            if (mod <= cross[num].begin()->b) { // 세로방향 신호등 on
+                        } else if (cross[num].dir == 1) { // 세로가 먼저 켜지는 신호등
+                            if (mod <= cross[num].b) { // 세로방향 신호등 on
                                 if (i == 2 || i == 3) break;
                             } else { // 가로방향 신호등 on
                                 if (i == 0 || i == 1) break;
@@ -104,10 +101,6 @@ int main() {
                 dist[nx][ny] = nt;
                 q.push({-nt, {nx, ny}});
             }
-        }
-        for(int i=0; i<cross_cnt; i++){
-            cout << cross[i].begin()->a << " ";
-            cout << cross[i].begin()->b << "\n";
         }
         if (!res) cout << "impossible\n";
     }
