@@ -63,6 +63,7 @@ void combination(int idx, int cnt) {
                 if (temp[i][j] == 1) f_cnt++;
             }
         }
+        if(f_cnt==0) return;
         while (round <= n) {
             for (auto a: g) temp[a.first][a.second] = 2;
             for (int k = 0; k < 3; k++) {
