@@ -40,5 +40,5 @@ int main() {
     cout << "\n";
     for (int i = 1; i <= n; i++) {
         cout << check[i] << " ";
-    }
+    } // 흠
 }
