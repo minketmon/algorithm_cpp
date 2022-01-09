@@ -3,15 +3,16 @@
 #include <vector>
 
 using namespace std;
-int n, m, g, r, can_cnt, f_cnt, ans;
+int n, m, g, r, can_cnt, ans;
 int init_map[51][51];
 int x[] = {-1, 1, 0, 0};
 int y[] = {0, 0, -1, 1};
 vector<pair<int, int>> can, green, red;
 
 void bfs(int map[51][51]) {
-    f_cnt = 0;
     queue<pair<int, int>> q;
+    int t[51][51] = {0,};
+    int f_cnt = 0;
     for (auto a: green) {
         map[a.first][a.second] = 3;
         q.push(a);
@@ -25,13 +26,21 @@ void bfs(int map[51][51]) {
         int cur_y = q.front().second;
         int color = map[cur_x][cur_y];
         q.pop();
+        if (color == 5) continue;
         for (int i = 0; i < 4; i++) {
             int nx = cur_x + x[i];
             int ny = cur_y + y[i];
             if (nx < 1 || ny < 1 || nx > n || ny > m) continue;
             if (map[nx][ny] == 0) continue;
             if (map[nx][ny] == 5) continue;
-            if(map[nx][ny])
+            if (map[nx][ny] == 1 || map[nx][ny] == 2) {
+                q.push({nx, ny});
+                map[nx][ny] = color;
+                t[nx][ny] = t[cur_x][cur_y] + 1;
+            } else if (color != map[nx][ny] && t[cur_x][cur_y] + 1 == t[nx][ny]) {
+                f_cnt++;
+                map[nx][ny] = 5;
+            }
         }
     }
     ans = f_cnt > ans ? f_cnt : ans;
