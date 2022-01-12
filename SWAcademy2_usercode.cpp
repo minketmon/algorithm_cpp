@@ -34,7 +34,7 @@ bool addMember(char newMemberName[], int newMemberSex, int relationship, char ex
             bubu[ex] = cnt;
             bubu[cnt] = ex;
             child[cnt] = child[ex];
-            for (int i : child[ex]) {
+            for (int i: child[ex]) {
                 par[i][newMemberSex] = cnt;
             }
             for (int i = 0; i < cnt; i++) {
@@ -49,7 +49,7 @@ bool addMember(char newMemberName[], int newMemberSex, int relationship, char ex
                 int tmp = par[ex][!newMemberSex]; // 기존 구성원의 새 구성원과 성별이 다른 부모
                 bubu[tmp] = cnt;
                 bubu[cnt] = tmp;
-                for (int i : child[tmp]) {
+                for (int i: child[tmp]) {
                     par[i][newMemberSex] = cnt;
                     child[cnt].push_back(i);
                 }

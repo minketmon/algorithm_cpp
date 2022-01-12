@@ -23,16 +23,18 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 extern void init(char initialMemberName[], int initialMemberSex);
+
 extern bool addMember(char newMemberName[], int newMemberSex, int relationship, char existingMemberName[]);
-extern int  getDistance(char nameA[], char nameB[]);
-extern int  countMember(char name[], int dist);
+
+extern int getDistance(char nameA[], char nameB[]);
+
+extern int countMember(char name[], int dist);
 
 ////////////////////////////////////////////////////////////////////////////////
 
 static int score = 0;
 
-static void cmd_init()
-{
+static void cmd_init() {
     char initialMemberName[NAME_LEN_MAX + 1];
     int initialMemberSex;
 
@@ -41,8 +43,7 @@ static void cmd_init()
     init(initialMemberName, initialMemberSex);
 }
 
-static void cmd_addMember()
-{
+static void cmd_addMember() {
     char newMemberName[NAME_LEN_MAX + 1];
     int newMemberSex;
     int relationship;
@@ -56,14 +57,12 @@ static void cmd_addMember()
     scanf("%d", &ans);
     bool ansbool = ans == 1 ? true : false;
 
-    if (ansbool != userAns)
-    {
+    if (ansbool != userAns) {
         score = 0;
     }
 }
 
-static void cmd_getDistance()
-{
+static void cmd_getDistance() {
     char nameA[NAME_LEN_MAX + 1];
     char nameB[NAME_LEN_MAX + 1];
 
@@ -74,14 +73,12 @@ static void cmd_getDistance()
     int ans;
     scanf("%d", &ans);
 
-    if (ans != userAns)
-    {
+    if (ans != userAns) {
         score = 0;
     }
 }
 
-static void cmd_countMember()
-{
+static void cmd_countMember() {
     char name[NAME_LEN_MAX + 1];
     int dist;
 
@@ -92,15 +89,13 @@ static void cmd_countMember()
     int ans;
     scanf("%d", &ans);
 
-    if (ans != userAns)
-    {
+    if (ans != userAns) {
         score = 0;
     }
 }
 
 
-int main()
-{
+int main() {
     setbuf(stdout, NULL);
 
     //	freopen("sample_input.txt", "r", stdin);
@@ -108,20 +103,17 @@ int main()
     int T, scoreIdx;
     scanf("%d %d", &T, &scoreIdx);
 
-    for (int TC = 1; TC <= T; TC++)
-    {
+    for (int TC = 1; TC <= T; TC++) {
         score = scoreIdx;
 
         int cmdL;
         scanf("%d", &cmdL);
 
-        for (int cmdIdx = 0; cmdIdx < cmdL; ++cmdIdx)
-        {
+        for (int cmdIdx = 0; cmdIdx < cmdL; ++cmdIdx) {
             int c_num;
             scanf("%d", &c_num);
 
-            switch (c_num)
-            {
+            switch (c_num) {
                 case INIT:
                     cmd_init();
                     break;

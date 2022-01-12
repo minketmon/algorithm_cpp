@@ -44,21 +44,19 @@ int buy(int mNumber, int mStock, int mQuantity, int mPrice) {
             if (Quan < mQuantity) {
                 mQuantity -= Quan;
                 Quan = 0;
-                if(_min[mStock] > 0){
+                if (_min[mStock] > 0) {
                     _min[mStock] = min(Pri, _min[mStock]);
                     int g = Pri - _min[mStock];
                     _gap[mStock] = max(g, _gap[mStock]);
-                }
-                else _min[mStock] = Pri;
+                } else _min[mStock] = Pri;
             } else {
                 Quan -= mQuantity;
                 mQuantity = 0;
-                if(_min[mStock] > 0){
+                if (_min[mStock] > 0) {
                     _min[mStock] = min(Pri, _min[mStock]);
                     int g = Pri - _min[mStock];
                     _gap[mStock] = max(g, _gap[mStock]);
-                }
-                else _min[mStock] = Pri;
+                } else _min[mStock] = Pri;
             }
             if (Quan > 0) {
                 quan[Num] = Quan;
@@ -93,21 +91,19 @@ int sell(int mNumber, int mStock, int mQuantity, int mPrice) {
             if (Quan < mQuantity) {
                 mQuantity -= Quan;
                 Quan = 0;
-                if(_min[mStock] > 0) {
+                if (_min[mStock] > 0) {
                     _min[mStock] = min(Pri, _min[mStock]);
                     int g = Pri - _min[mStock];
                     _gap[mStock] = max(g, _gap[mStock]);
-                }
-                else _min[mStock] = Pri;
+                } else _min[mStock] = Pri;
             } else {
                 Quan -= mQuantity;
                 mQuantity = 0;
-                if(_min[mStock] > 0){
+                if (_min[mStock] > 0) {
                     _min[mStock] = min(Pri, _min[mStock]);
                     int g = Pri - _min[mStock];
                     _gap[mStock] = max(g, _gap[mStock]);
-                }
-                else _min[mStock] = Pri;
+                } else _min[mStock] = Pri;
             }
             if (Quan > 0) {
                 quan[Num] = Quan;
