@@ -1,125 +1,130 @@
-#include <iostream>
+#include <cstring>
 #include <vector>
-#include <map>
 
+#define MISS        0
+#define CARRIER        1
+#define BATTLESHIP    2
+#define CRUISER        3
+#define SUBMARINE    4
+#define DESTROYER    5
 using namespace std;
-int cnt, gender[201];
-map<string, int> m;
-vector<pair<int, int>> v[201];
-//	 The below commented functions are for your reference. If you want
-//	 to use it, uncomment these functions.
-/*
-int mstrcmp(const char a[], const char b[])
-{
-	int i;
-	for (i = 0; a[i] != '\0'; ++i) if (a[i] != b[i]) return a[i] - b[i];
-	return a[i] - b[i];
+
+extern int fire(int r, int c);
+
+int map[10][10], cnt[5], mass[5] = {5, 4, 3, 3, 2};
+int dx[] = {1, 0, -1, 0};
+int dy[] = {0, 1, 0, -1};
+vector<pair<int, int>> loc[5];
+
+void init(int limit) {
+
 }
 
-void mstrcpy(char dest[], const char src[])
-{
-	int i = 0;
-	while (src[i] != '\0') { dest[i] = src[i]; i++; }
-	dest[i] = src[i];
-}
+void play() {
+    memset(map, -1, sizeof(map));
+    memset(cnt, 0, sizeof(cnt));
+    for (int i = 0; i < 5; i++) loc[i].clear();
 
-int mstrlen(const char a[])
-{
-	int i;
-	for (i = 0; a[i] != '\0'; ++i);
-	return i;
-}
-*/
-
-void init(char initialMemberName[], int initialMemberSex) {
-    m.insert({initialMemberName, cnt});
-    gender[cnt] = initialMemberSex;
-}
-
-bool addMember(char newMemberName[], int newMemberSex, int relationship, char existingMemberName[]) {
-    //cout << m.find(existingMemberName)->second << "\\\n";
-    if (relationship == 0) { // 배우자
-        int existingMemberNum = m.find(existingMemberName)->second;
-        if (gender[existingMemberNum] != newMemberSex)
-            return false;
-        for (auto a: v[existingMemberNum]) {
-            if (a.first == 0) return false;
-        }
-        cnt++;
-        m.insert({newMemberName, cnt});
-        gender[cnt] = newMemberSex;
-        v[existingMemberNum].push_back({relationship, cnt});
-        v[cnt].push_back({relationship, existingMemberNum});
-        for (auto a: v[existingMemberNum]) {
-            if (a.first == 2) {
-                v[cnt].push_back({2, a.second});
-                v[a.second].push_back({1, cnt});
+    for (int i = 0; i <= 9; i++) {
+        for (int j = 0; j <= 9; j++) {
+            if ((i + j) % 2) continue;
+            map[i][j] = fire(i, j);
+            if (map[i][j] > 0) {
+                loc[map[i][j] - 1].push_back({i, j});
+                cnt[map[i][j] - 1]++;
             }
         }
-        return true;
-    } //else if (relationship == 1) { // 부모
-//        int existingMemberNum = m.find(existingMemberName)->second;
-//        bool already_par = false;
-//        cnt++;
-//        for (auto a: v[existingMemberNum]) {
-//            if (a.first == 1) {
-//                if (gender[a.second] == newMemberSex) {
-//                    cnt--;
-//                    return false;
-//                } else { // 기존 구성원에게 성별이 다른 부모가 있는 경우
-//                    already_par = true;
-//                    m.insert({newMemberName, cnt});
-//                    gender[cnt] = newMemberSex;
-//                    v[a.second].push_back({0, cnt});
-//                    v[cnt].push_back({0, a.second});
-//                    for (auto b: v[a.second]) {
-//                        if (b.first == 2) {
-//                            v[cnt].push_back({2, b.second});
-//                            v[b.second].push_back({1, cnt});
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//        if (!already_par) {
-//            m.insert({newMemberName, cnt});
-//            gender[cnt] = newMemberSex;
-//            v[cnt].push_back({2, existingMemberNum});
-//            v[existingMemberNum].push_back({1, cnt});
-//        }
-//        return true;
-//    } else if (relationship == 2) { // 자식
-//        int existingMemberNum = m.find(existingMemberName)->second;
-//        bool already_par = false;
-//        cnt++;
-//        m.insert({newMemberName, cnt});
-//        gender[cnt] = newMemberSex;
-//        for (auto a: v[existingMemberNum]) {
-//            if (a.first == 0) {
-//                already_par = true;
-//                v[cnt].push_back({1, a.second});
-//                v[a.second].push_back({2, cnt});
-//                v[existingMemberNum].push_back({2, cnt});
-//                v[cnt].push_back({1, existingMemberNum});
-//            }
-//        }
-//        if (!already_par) {
-//            v[cnt].push_back({1, existingMemberNum});
-//            v[existingMemberNum].push_back({2, cnt});
-//        }
-//    }
-    return false;
-}
+    }
 
-int getDistance(char nameA[], char nameB[]) {
-//    int num = m.find(nameA)->second;
-//    cout << "nameA : " << nameA << "\n";
-//    for (auto a: v[num]) {
-//        cout << a.first << " " << a.second << "\n";
-//    }
-    return -1;
-}
+    // CARRIER, BATTLESHIP
+    for (int s = 0; s < 2; s++) {
+        bool flag = false;
+        if (loc[s][0].second == loc[s][1].second) { // 세로 방향
+            int i = loc[s][0].first;
+            int j = loc[s][0].second;
+            for (int x = i + 1; x < 10; x++) {
+                if (cnt[s] == mass[s]) break;
+                if (map[x][j] == -1) {
+                    map[x][j] = fire(x, j);
+                    if (map[x][j]) {
+                        loc[map[x][j] - 1].push_back({x, j});
+                        cnt[map[x][j] - 1]++;
+                    }
+                }
+                if (map[x][j] != s + 1) break;
+            }
+            for (int x = i - 1; x >= 0; x--) {
+                if (cnt[s] == mass[s]) break;
+                if (map[x][j] == -1) {
+                    map[x][j] = fire(x, j);
+                    if (map[x][j]) {
+                        loc[map[x][j] - 1].push_back({x, j});
+                        cnt[map[x][j] - 1]++;
+                    }
+                }
+                if (map[x][j] != s + 1) break;
+            }
+        } else { //가로 방향
+            int i = loc[s][0].first;
+            int j = loc[s][0].second;
+            for (int x = j + 1; x < 10; x++) {
+                if (cnt[s] == mass[s]) break;
+                if (map[i][x] == -1) {
+                    map[i][x] = fire(i, x);
+                    if (map[i][x]) {
+                        loc[map[i][x] - 1].push_back({i, x});
+                        cnt[map[i][x] - 1]++;
+                    }
+                }
+                if (map[i][x] != s + 1) break;
+            }
+            for (int x = j - 1; x >= 0; x--) {
+                if (cnt[s] == mass[s]) break;
+                if (map[i][x] == -1) {
+                    map[i][x] = fire(i, x);
+                    if (map[i][x]) {
+                        loc[map[i][x] - 1].push_back({i, x});
+                        cnt[map[i][x] - 1]++;
+                    }
+                }
+                if (map[i][x] != s + 1) break;
+            }
+        }
 
-int countMember(char name[], int dist) {
-    return -1;
+    }
+
+    // CRUSIER, SUBMARINE
+    for (int s = 2; s < 4; s++) {
+        for (int i = 0; i < loc[s].size(); i++) {
+            if (cnt[s] == mass[s]) break;
+            int x = loc[s][i].first;
+            int y = loc[s][i].second;
+            for (int dir = 0; dir < 4; dir++) {
+                int xx = x + dx[dir];
+                int yy = y + dy[dir];
+                if (xx < 0 || yy < 0 || xx > 9 || yy > 9) continue;
+                if (map[xx][yy] == -1) {
+                    map[xx][yy] = fire(xx, yy);
+                    if (map[xx][yy]) {
+                        loc[map[xx][yy] - 1].push_back({xx, yy});
+                        cnt[map[xx][yy] - 1]++;
+                    }
+                }
+            }
+        }
+    }
+
+    //DESTROYER
+    if (cnt[4] == 2) return;
+    int x = loc[4][0].first;
+    int y = loc[4][0].second;
+    for (int dir = 0; dir < 4; dir++) {
+        int xx = x + dx[dir];
+        int yy = y + dy[dir];
+        if (xx < 0 || yy < 0 || xx > 9 || yy > 9) continue;
+        if (map[xx][yy] == -1) {
+            map[xx][yy] = fire(xx, yy);
+            if (map[xx][yy] == DESTROYER) break;
+        }
+    }
 }
