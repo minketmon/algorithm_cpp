@@ -10,7 +10,7 @@ vector<int> v[100001];
 void built(int num) {
     if (in[num] <= 0) {
         isbuild[num]++;
-        for (auto a: v[num]) in[a]--;
+        if (isbuild[num] == 1) for (auto a: v[num]) in[a]--;
     } else {
         flag = true;
     }
@@ -21,7 +21,7 @@ void destroy(int num) {
         flag = true;
     } else {
         isbuild[num]--;
-        for (auto a: v[num]) in[a]++;
+        if(isbuild[num]==0) for (auto a: v[num]) in[a]++;
     }
 }
 
