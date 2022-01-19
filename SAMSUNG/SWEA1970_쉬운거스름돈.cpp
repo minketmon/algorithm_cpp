@@ -10,14 +10,14 @@ int main() {
     for (test_case = 1; test_case <= T; test_case++) {
         int n, cnt[9] = {0,};
         cin >> n;
-        for(int i=0; i<8; i++){
-            if(n >= cash[i]) {
-                cnt[i] += n/cash[i];
+        for (int i = 0; i < 8; i++) {
+            if (n >= cash[i]) {
+                cnt[i] += n / cash[i];
                 n %= cash[i];
             }
         }
         cout << '#' << test_case << "\n";
-        for(int i=0; i<8; i++) cout << cnt[i] << " ";
+        for (int i = 0; i < 8; i++) cout << cnt[i] << " ";
         cout << "\n";
     }
     return 0;
