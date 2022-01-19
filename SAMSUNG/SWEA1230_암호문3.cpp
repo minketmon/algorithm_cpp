@@ -46,6 +46,8 @@ void deleteNode(int idx) {
 }
 
 int main() {
+    cin.tie(nullptr);
+    ios::sync_with_stdio(false);
     int test_case;
     for (test_case = 1; test_case <= 10; test_case++) {
         int n, data, x, y, s;
