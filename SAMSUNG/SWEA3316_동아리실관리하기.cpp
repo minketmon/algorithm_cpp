@@ -1,59 +1,41 @@
 #include <iostream>
+#include <cstring>
 
 using namespace std;
+long long dp[10001][16];
 
-int main(int argc, char **argv) {
-    int test_case;
-    int T;
-    cin >> T;
-    for (test_case = 1; test_case <= T; ++test_case) {
-        char chiefs[10000];
-        int pivot = 0;
-        int *counts = new int[16];
-
-        cin >> chiefs;
-
-        for (int i = 0; i < 16; i++) counts[i] = 0;
-
-        counts[1]++;
-
-        while (chiefs[pivot]) { // A
-            int *newCnts = new int[16];
-            for (int i = 0; i < 16; i++) newCnts[i] = 0;
-
-            int chief = chiefs[pivot] - 'A'; // 0
-            cout << "\n" << chief << "\n";
-            for (int i = 0; i < 16; i++) {
-                if ((i & 1 << chief)==0) continue;
-                // 책임자가 출근함
-                long long cnt = 0;
-                for (int j = 0; j < 16; j++) {
-                    cout << (j&i) << " ";
-                    if ((j & i)==0) continue;
-
-                    cnt += counts[j];
-
-                    if (cnt > 1000000007) cnt %= 1000000007;
+int main() {
+    cin.tie(nullptr);
+    ios::sync_with_stdio(false);
+    freopen("input.txt", "r", stdin);
+    int tc, t;
+    cin >> t;
+    for (tc = 1; tc <= t; tc++) {
+        memset(dp, 0, sizeof(dp));
+        long long ans = 0;
+        string s;
+        cin >> s;
+        for (int i = 0; i < s.size(); i++) {
+            int manager = 1 << (s[i] - 'A');
+            for (int j = 0; j < 16; j++) {
+                if (i == 0) {
+                    if ((1 & j) != 0 && (manager & j) != 0)dp[i][j] = 1;
+                } else {
+                    if (dp[i - 1][j] > 0) {
+                        for (int k = 0; k < 16; k++) {
+                            if ((manager & k) != 0 && (j & k) != 0)  {
+                                dp[i][k] += dp[i - 1][j];
+                                dp[i][k] %= 1000000007;
+                            }
+                        }
+                    }
                 }
-                cout << "\n";
-                newCnts[i] = cnt;
             }
-
-            delete counts;
-            counts = newCnts;
-
-            pivot++;
         }
-
-        int sum = 0;
         for (int i = 0; i < 16; i++) {
-            sum += counts[i];
-            if (sum > 1000000007) sum %= 1000000007;
+            ans += dp[s.size() - 1][i];
+            ans %= 1000000007;
         }
-
-        delete counts;
-
-        cout << '#' << test_case << ' ' << sum << endl;
+        cout << '#' << tc << " " << ans << "\n";
     }
-    return 0;
 }
