@@ -37,40 +37,37 @@ using namespace std;
 vector<int> v;
 
 extern void putIn(int n, int a);
+
 extern int closeDoor(int n);
+
 extern void arrest(int n);
+
 extern void clearRoom();
 
 void investigate() {
-    int cnt=0;
-    int num=0;
-    for (int i = 0; i < MAX_NUM; i++){
+    int cnt = 0;
+    int num = 0;
+    for (int i = 0; i < MAX_NUM; i++) {
         putIn(cnt, i);
-        if(i>0 && i%1000 ==999)
-        {
-            if(closeDoor(cnt)!=0)
-            {
-                v.push_back(i/1000);
+        if (i > 0 && i % 1000 == 999) {
+            if (closeDoor(cnt) != 0) {
+                v.push_back(i / 1000);
                 num++;
             }
             cnt++;
         }
     }
-    cout<<cnt<<" "<<num<<"\n";
-    cnt =0;
-    num=0;
+    cout << cnt << " " << num << "\n";
+    cnt = 0;
+    num = 0;
     vector<int> v2;
     clearRoom();
-    for(auto a:v)
-    {
-        for(int i=a*1000;i<(a+1)*1000;i++)
-        {
+    for (auto a: v) {
+        for (int i = a * 1000; i < (a + 1) * 1000; i++) {
             putIn(cnt, i);
-            if(i> 0 && i%100==99)
-            {
-                if(closeDoor(cnt)!=0)
-                {
-                    v2.push_back(i/100);
+            if (i > 0 && i % 100 == 99) {
+                if (closeDoor(cnt) != 0) {
+                    v2.push_back(i / 100);
                     num++;
                 }
                 cnt++;
@@ -78,19 +75,15 @@ void investigate() {
         }
     }
     v.clear();
-    cout<<cnt<<" "<<num<<"\n";
-    cnt = num =0;
+    cout << cnt << " " << num << "\n";
+    cnt = num = 0;
     clearRoom();
-    for(auto a:v2)
-    {
-        for(int i=a*100;i<(a+1)*100;i++)
-        {
+    for (auto a: v2) {
+        for (int i = a * 100; i < (a + 1) * 100; i++) {
             putIn(cnt, i);
-            if(i> 0 && i%10==9)
-            {
-                if(closeDoor(cnt)!=0)
-                {
-                    v.push_back(i/10);
+            if (i > 0 && i % 10 == 9) {
+                if (closeDoor(cnt) != 0) {
+                    v.push_back(i / 10);
                     num++;
                 }
                 cnt++;
@@ -98,18 +91,15 @@ void investigate() {
         }
     }
     v2.clear();
-    cout<<cnt<<" "<<num<<"\n";
-    cnt = num=0;
+    cout << cnt << " " << num << "\n";
+    cnt = num = 0;
     clearRoom();
-    for(auto a : v)
-    {
-        for(int i=a*10;i<(a+1)*10;i++)
-        {
+    for (auto a: v) {
+        for (int i = a * 10; i < (a + 1) * 10; i++) {
             putIn(cnt, i);
-            if(i>0 && i%2==1)
-            {
-                if(closeDoor(cnt)!=0){
-                    v2.push_back(i/2);
+            if (i > 0 && i % 2 == 1) {
+                if (closeDoor(cnt) != 0) {
+                    v2.push_back(i / 2);
                     num++;
                 }
                 cnt++;
@@ -117,22 +107,20 @@ void investigate() {
         }
     }
     v.clear();
-    cout<<cnt<<" "<<num<<"\n";
+    cout << cnt << " " << num << "\n";
     cnt = num = 0;
     clearRoom();
-    for(auto a : v2)
-    {
-        for(int i=a*2;i<(a+1)*2;i++)
-        {
+    for (auto a: v2) {
+        for (int i = a * 2; i < (a + 1) * 2; i++) {
             putIn(i, i);
-            if(closeDoor(i)!=0)
-            {
+            if (closeDoor(i) != 0) {
                 arrest(i);
             }
         }
     }
     clearRoom();
 }
+
 void investigate2() {
 //    for (int i = 0; i < 10; i++) {
 //        putIn(i, i);
