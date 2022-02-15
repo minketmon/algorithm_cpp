@@ -22,94 +22,85 @@ extern int countCharacter(char mChar);
 
 /////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////
+#include <cstring>
+
 #define MAX_NODE 100000
 struct Node {
     char data;
-    Node *prev;
-    Node *next;
-} node[90010];
-Node *head, *tail, *rowStart[310], *nowPointer;
-int charRow[27][310], cntRow[310], nowRow, nowCol, tot, H, W, minusChar[27];
-int nodeCnt;
+    Node *next, *prev;
+} node[90001];
+int h, w, cur_row, cur_col, total, node_cnt;
+Node *head, *tail, *row[301], *now;
+int cnt[301][27], row_cnt[301], min_char[27];
 
-void add(Node *now, char c) {
-    node[nodeCnt].data = c;
-    Node *temp = &node[nodeCnt++];
-    temp->next = now->next, temp->prev = now;
-    now->next->prev = temp, now->next = temp;
+void add(Node *now, char mChar) {
+    node[node_cnt].data = mChar;
+    Node *temp = &node[node_cnt++];
+    temp->next = now->next;
+    now->next->prev = temp;
+    temp->prev = now, now->next = temp;
 }
 
-int realStart;
-
-void init(int _H, int _W, char mStr[]) {
-    if (realStart == 0) {
-        head = new Node(), tail = new Node();
-    }
-    H = _H, W = _W;
-    realStart = 1;
+void init(int H, int W, char mStr[]) {
+    head = new Node(), tail = new Node();
+    h = H, w = W, cur_row = 1, cur_col = 1, total = 0, node_cnt = 0;
     head->next = tail, tail->prev = head;
-    nodeCnt = 0, nowRow = 1, nowCol = 1, nowPointer = head, tot = 0;
-    memset(charRow, 0, sizeof(charRow));
-    memset(cntRow, 0, sizeof(cntRow));
-    memset(minusChar, 0, sizeof(minusChar));
-    rowStart[1] = head;
-    Node *now = head;
+    row[1] = head, now = head;
+    memset(cnt, 0, sizeof(cnt));
+    memset(row_cnt, 0, sizeof(row_cnt));
+    memset(min_char, 0, sizeof(min_char));
+    Node *temp = head;
     for (int i = 1; mStr[i - 1] != 0; i++) {
-        int nowRow1 = (i - 1) / W + 1;
-        add(now, mStr[i - 1]);
-        charRow[mStr[i - 1] - 'a' + 1][nowRow1]++;
-        cntRow[nowRow1]++;
-        tot++;
-        now = now->next;
-        if (i % W == 0) rowStart[nowRow1 + 1] = now;
+        add(temp, mStr[i - 1]);
+        int curr = (i - 1) / w + 1;
+        cnt[curr][mStr[i - 1] - 'a']++, row_cnt[curr]++, total++;
+        temp = temp->next;
+        if (i % w == 0) row[curr + 1] = temp;
     }
 }
 
 void insert(char mChar) {
-    add(nowPointer, mChar);
-    tot++;
-    charRow[mChar - 'a' + 1][nowRow]++, cntRow[nowRow]++, minusChar[mChar - 'a' + 1]++;
-    for (int i = nowRow; i <= H; i++) {
-        if (cntRow[i] <= W) {
-            if (cntRow[i] == W) {
-                rowStart[i + 1] = tail->prev;
-            }
+    add(now, mChar);
+    cnt[cur_row][mChar - 'a']++, row_cnt[cur_row]++, min_char[mChar - 'a']++;
+    for (int i = cur_row; i <= h; i++) {
+        if (row_cnt[i] <= w) {
+            if (row_cnt[i] == w) row[i + 1] = tail->prev;
             break;
+        } else {
+            cnt[i][row[i + 1]->data - 'a']--;
+            cnt[i + 1][row[i + 1]->data - 'a']++;
+            row_cnt[i]--, row_cnt[i + 1]++;
+            row[i + 1] = row[i + 1]->prev;
         }
-        charRow[rowStart[i + 1]->data - 'a' + 1][i]--;
-        cntRow[i]--;
-        charRow[rowStart[i + 1]->data - 'a' + 1][i + 1]++;
-        cntRow[i + 1]++;
-        rowStart[i + 1] = rowStart[i + 1]->prev;
     }
-    nowCol++;
-    if (nowCol > W) {
-        nowRow++, nowCol = 1;
-        memset(minusChar, 0, sizeof(minusChar));
+    if (w < ++cur_col) {
+        cur_row++, cur_col = 1;
+        memset(min_char, 0, sizeof(min_char));
     }
-    nowPointer = nowPointer->next;
+    total++;
+    now = now->next;
 }
 
 char moveCursor(int mRow, int mCol) {
-    memset(minusChar, 0, sizeof(minusChar));
-    nowRow = mRow, nowCol = mCol;
-    if ((mRow - 1) * W + mCol > tot) {
-        nowRow = tot / W + 1, nowCol = tot % W + 1;
+    memset(min_char, 0, sizeof(min_char));
+    cur_row = mRow, cur_col = mCol;
+    if (mCol + (mRow - 1) * w > total) cur_col = total % w + 1, cur_row = total / w + 1;
+    now = row[cur_row];
+    for (int i = 0; i < cur_col - 1; i++) {
+        min_char[now->next->data - 'a']++;
+        now = now->next;
     }
-    nowPointer = rowStart[nowRow];
-    for (int i = 0; i < nowCol - 1; i++) {
-        if (nowPointer->next == tail) return '$';
-        minusChar[nowPointer->next->data - 'a' + 1]++;
-        nowPointer = nowPointer->next;
-    }
-    if (nowPointer->next == tail) return '$';
-    return nowPointer->next->data;
+    if (now->next == tail) return '$';
+    else return now->next->data;
 }
 
+
 int countCharacter(char mChar) {
-    int ret = 0;
-    for (int i = nowRow; cntRow[i] != 0; i++) ret += charRow[mChar - 'a' + 1][i];
-    return ret - minusChar[mChar - 'a' + 1];
+    int ans = 0;
+    for (int i = cur_row; row_cnt[i] != 0; i++)
+        ans += cnt[i][mChar - 'a'];
+    ans -= min_char[mChar - 'a'];
+    return ans;
 }
 
 static bool run() {
@@ -138,6 +129,7 @@ static bool run() {
 
             char ans;
             scanf(" %c", &ans);
+            if (ret != ans)cout << ret << ' ' << ans << '\n';
             if (ret != ans) {
                 correct = false;
             }
@@ -148,6 +140,7 @@ static bool run() {
 
             int ans;
             scanf("%d", &ans);
+            if (ret != ans) cout << ret << ' ' << ans << '\n';
             if (ret != ans) {
                 correct = false;
             }
