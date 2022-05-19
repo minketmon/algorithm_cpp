@@ -6,9 +6,8 @@ int cnt;
 void dfs(int idx, vector<int> num, int target) {
     if (idx == num.size()) {
         int sum = 0;
-        for (int i : num) {
+        for (int i : num)
             sum += i;
-        }
         if (sum == target) cnt++;
         return;
     }
