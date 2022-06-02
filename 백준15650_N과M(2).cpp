@@ -2,7 +2,7 @@
 #include <vector>
 
 using namespace std;
-int n, m, visited[10];
+int n, m;
 vector<int> v;
 
 void sol(int num) {
@@ -19,7 +19,6 @@ void sol(int num) {
         return;
     }
     for (int i = 1; i <= n; i++) {
-        if (visited[i]) continue;
         v.push_back(i);
         sol(num + 1);
         v.pop_back();
