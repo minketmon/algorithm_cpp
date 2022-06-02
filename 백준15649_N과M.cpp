@@ -36,3 +36,39 @@ int main() {
         }cout << '\n';
     }
 }
+/*
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+int n, m;
+vector<int> v;
+bool ck[10];
+
+void sol(int k) {
+    if (k == m) {
+        for (int u : v)
+            cout << u << " ";
+        cout << "\n";
+        return;
+    }
+    for (int i = 1; i <= n; i++) {
+        if (ck[i]) continue;
+        ck[i] = true;
+        v.push_back(i);
+        sol(k + 1);
+        v.pop_back();
+        ck[i] = false;
+    }
+}
+
+int main() {
+    cin.tie(nullptr);
+    cout.tie(nullptr);
+    ios::sync_with_stdio(false);
+
+    cin >> n >> m;
+    sol(0);
+}
+ */
