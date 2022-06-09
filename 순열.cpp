@@ -1,18 +1,16 @@
 #include <iostream>
 #include <vector>
+
 using namespace std;
 
-int arr[10] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+int arr[10] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
 int cnt, n, r;
 int visited[1000];
 int order[1000];
 
-void permutation(int now)
-{
-    if (now == r)
-    {
-        for (int i = 0; i < r; i++)
-        {
+void permutation(int now) {
+    if (now == r) {
+        for (int i = 0; i < r; i++) {
             cout << arr[order[i]] << " ";
         }
         cout << endl;
@@ -21,8 +19,7 @@ void permutation(int now)
         return;
     }
 
-    for (int i = 0; i < n; i++)
-    {
+    for (int i = 0; i < n; i++) {
         if (visited[i])
             continue;
 
@@ -33,8 +30,7 @@ void permutation(int now)
     }
 }
 
-int main()
-{
+int main() {
     cout << "n : ";
     cin >> n;
     cout << "r : ";
