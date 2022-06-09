@@ -28,7 +28,7 @@ int nodeCnt(int start, int skip) {
     return cnt;
 }
 
-int solution(int N, vector<vector<int>> wires) {
+int solution(int n, vector<vector<int>> wires) {
     for (auto wire: wires) {
         v[wire[0]].push_back(wire[1]);
         v[wire[1]].push_back(wire[0]);
@@ -37,7 +37,7 @@ int solution(int N, vector<vector<int>> wires) {
         int a = wire[0];
         int b = wire[1];
         int a_cnt = nodeCnt(a, b);
-        int b_cnt = nodeCnt(b, a);
+        int b_cnt = n - a_cnt;
         int gap = abs(a_cnt - b_cnt);
         ans = ans < gap ? ans : gap;
     }
